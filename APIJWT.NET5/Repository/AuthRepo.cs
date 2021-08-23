@@ -54,7 +54,7 @@ namespace APIJWT.NET5.Repository
         {
             var authModel = new AuthModel();
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is null ||await _userManager.CheckPasswordAsync(user,model.Password))
+            if (user is null ||! await _userManager.CheckPasswordAsync(user,model.Password))
             {
                 authModel.Message = "Email or Password Incorrect";
                 return authModel;
