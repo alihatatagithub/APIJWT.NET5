@@ -53,5 +53,24 @@ namespace APIJWT.NET5.Controllers
             return Ok(new { token = result.Token, expireOn = result.ExpireOn });
         }
 
+        [HttpPost("AddRole")]
+        public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _authRepo.AddRoleAsync(model);
+            if (string.IsNullOrEmpty(result))
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(model);
+        }
+
+
+
     }
 }

@@ -11,5 +11,6 @@ namespace APIJWT.NET5.Repository
     {
         Task<AuthModel> RegisterAsync(RegisterViewModel model);
         Task<AuthModel> GetTokenAsync(GetTokenViewModel model);
+        Task<string> AddRoleAsync(AddRoleViewModel model);
     }
 }

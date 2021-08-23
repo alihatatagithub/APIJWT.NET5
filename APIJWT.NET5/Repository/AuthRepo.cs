@@ -17,11 +17,37 @@ namespace APIJWT.NET5.Repository
     public class AuthRepo : IAuthRepo
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         JWT _Jwt;
-        public AuthRepo(UserManager<ApplicationUser> userManager,IOptions<JWT> Jwt)
+        public AuthRepo(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<JWT> Jwt)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _Jwt = Jwt.Value;
+        }
+
+        public async Task<string> AddRoleAsync(AddRoleViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user is null)
+            {
+                return "Invalid UserName Or Role";
+            }
+            if (await _userManager.IsInRoleAsync(user,model.RoleName))
+            {
+                return "User Already Assign To This Role";
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, model.RoleName);
+
+            return result.Succeeded ? string.Empty : "Something went wrong";
+            //if (result.Succeeded)
+            //{
+            //    return string.Empty;
+            //}
+            //return "Something went wrong";
         }
 
         public async Task<AuthModel> GetTokenAsync(GetTokenViewModel model)
