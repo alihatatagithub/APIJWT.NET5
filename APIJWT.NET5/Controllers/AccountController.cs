@@ -62,7 +62,7 @@ namespace APIJWT.NET5.Controllers
             }
 
             var result = await _authRepo.AddRoleAsync(model);
-            if (string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(result))
             {
                 return BadRequest(result);
             }

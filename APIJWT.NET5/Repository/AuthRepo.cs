@@ -31,7 +31,7 @@ namespace APIJWT.NET5.Repository
         public async Task<string> AddRoleAsync(AddRoleViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user is null)
+            if (user is null || ! await _roleManager.RoleExistsAsync(model.RoleName))
             {
                 return "Invalid UserName Or Role";
             }
@@ -133,6 +133,7 @@ namespace APIJWT.NET5.Repository
                 new Claim(JwtRegisteredClaimNames.Sub,user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
+              
 
             }.Union(userClaims)
             .Union(roleClaims);
